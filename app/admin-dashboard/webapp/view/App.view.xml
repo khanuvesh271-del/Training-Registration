@@ -5,16 +5,16 @@
     xmlns="sap.m">
 
     <App id="adminApp">
-      <Page
-    title="Training Registration Admin Dashboard"
-    showHeader="true">
+        <Page
+            title="Training Registration Admin Dashboard"
+            showHeader="true">
 
-    <headerContent>
-        <Button
-            text="Refresh"
-            icon="sap-icon://refresh"
-            press=".onRefresh"/>
-    </headerContent>
+            <headerContent>
+                <Button
+                    text="Refresh"
+                    icon="sap-icon://refresh"
+                    press=".onRefresh"/>
+            </headerContent>
 
             <content>
                 <VBox
@@ -34,55 +34,89 @@
                         alignItems="Stretch"
                         class="sapUiSmallMarginTop">
 
-                        <Panel
-                            headerText="Total Training Sessions"
-                            width="260px"
+                        <Panel headerText="Total Training Sessions" width="260px"
                             class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
                             <content>
-                                <ObjectNumber
-                                    number="{dashboard>/totalSessions}"
-                                    emphasized="true"
-                                    state="Information"/>
+                                <ObjectNumber number="{dashboard>/totalSessions}"
+                                    emphasized="true" state="Information"/>
                             </content>
                         </Panel>
 
-                        <Panel
-                            headerText="Active Enrolments"
-                            width="260px"
+                        <Panel headerText="Active Enrolments" width="260px"
                             class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
                             <content>
-                                <ObjectNumber
-                                    number="{dashboard>/activeEnrolments}"
-                                    emphasized="true"
-                                    state="Success"/>
+                                <ObjectNumber number="{dashboard>/activeEnrolments}"
+                                    emphasized="true" state="Success"/>
                             </content>
                         </Panel>
 
-                        <Panel
-                            headerText="Total Employees"
-                            width="260px"
+                        <Panel headerText="Total Employees" width="260px"
                             class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
                             <content>
-                                <ObjectNumber
-                                    number="{dashboard>/totalEmployees}"
-                                    emphasized="true"
-                                    state="Information"/>
+                                <ObjectNumber number="{dashboard>/totalEmployees}"
+                                    emphasized="true" state="Information"/>
                             </content>
                         </Panel>
 
-                        <Panel
-                            headerText="Available Seats"
-                            width="260px"
+                        <Panel headerText="Available Seats" width="260px"
                             class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
                             <content>
-                                <ObjectNumber
-                                    number="{dashboard>/availableSeats}"
-                                    emphasized="true"
-                                    state="Success"/>
+                                <ObjectNumber number="{dashboard>/availableSeats}"
+                                    emphasized="true" state="Success"/>
                             </content>
                         </Panel>
 
                     </FlexBox>
+
+                    <Title
+                        text="Trainer Profiles"
+                        level="H2"
+                        class="sapUiMediumMarginTop"/>
+
+                   
+<Table
+    id="trainersTable"
+    items="{trainers>/items}"
+    growing="true"
+    growingThreshold="10">
+
+    <headerToolbar>
+        <Toolbar>
+            <Title text="All Trainer Courses" level="H3"/>
+            <ToolbarSpacer/>
+            <Button
+                text="Refresh Trainers"
+                icon="sap-icon://refresh"
+                press=".onRefreshTrainers"/>
+        </Toolbar>
+    </headerToolbar>
+
+    <columns>
+        <Column><Text text="Trainer Name"/></Column>
+        <Column><Text text="Email"/></Column>
+        <Column><Text text="Phone"/></Column>
+        <Column><Text text="Assigned Course"/></Column>
+        <Column hAlign="End">
+            <Text text="Active Enrolments"/>
+        </Column>
+    </columns>
+
+    <items>
+        <ColumnListItem>
+            <cells>
+                <Text text="{trainers>fullName}"/>
+                <Text text="{trainers>email}"/>
+                <Text text="{trainers>phone}"/>
+                <Text text="{trainers>courseTitle}"/>
+                <ObjectNumber
+                    number="{trainers>activeEnrolments}"
+                    emphasized="true"/>
+            </cells>
+        </ColumnListItem>
+    </items>
+
+</Table>
+
 
                 </VBox>
             </content>

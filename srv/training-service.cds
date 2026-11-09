@@ -11,7 +11,9 @@ service TrainingService {
     }
 
     function getDashboardStats() returns DashboardStats;
+entity Trainers as projection on db.Trainers;
 
+entity Courses as projection on db.Courses;
     entity Sessions as projection on db.Sessions {
     *,
     virtual enrolledCount : Integer,
