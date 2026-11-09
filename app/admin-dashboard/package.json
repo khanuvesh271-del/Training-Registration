@@ -1,0 +1,11 @@
+
+{
+  "name": "admin-dashboard",
+  "version": "1.0.0",
+  "description": "Training Registration Admin Dashboard",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@ui5/cli": "^4.0.33"
+  }
+}

@@ -1,0 +1,5 @@
+
+specVersion: "4.0"
+metadata:
+  name: training-admin-dashboard
+type: application

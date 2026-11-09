@@ -1,0 +1,49 @@
+{
+  "name": "training-registration",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@sap/cds": "^10",
+    "@sap/xssec": "^4",
+    "express-session": "^1.19.0"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^3",
+    "@sap/cds-dk": "^10",
+    "@sap/ux-ui5-tooling": "^1.34.0",
+    "cds-plugin-ui5": "^0.17.0",
+    "mbt": "^1.2.49",
+    "rimraf": "^5.0.5"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-training": "cds watch --open training.training/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "undeploy": "cf undeploy training-registration --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-enrolments": "cds watch --open training.enrolments/index.html?sap-ui-xx-viewCache=false --livereload false"
+  },
+  "private": true,
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": "db/training.sqlite"
+        }
+      },
+      "[production]": {
+        "auth": "xsuaa"
+      },
+      "html5-repo": true
+    }
+  },
+  "workspaces": [
+    "app/*"
+  ],
+  "sapux": [
+    "app/training",
+    "app/enrolments",
+    "app/admin-dashboard"
+  ]
+}

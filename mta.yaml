@@ -1,0 +1,204 @@
+_schema-version: 3.3.0
+ID: training-registration
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: training-registration-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: training-registration-auth
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    instances: 1
+  build-parameters:
+    builder: npm-ci
+- name: training-registration
+  type: approuter.nodejs
+  path: .deploy/app-router
+  requires:
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv-api
+      url: ~{srv-url}
+  - name: training-registration-auth
+  - name: training-registration-html5-runtime
+  - name: training-registration-destination-service
+    group: destinations
+    properties:
+      forwardAuthToken: false
+      name: ui5
+      url: https://ui5.sap.com
+  provides:
+  - name: app-api
+    properties:
+      app-protocol: ${protocol}
+      app-uri: ${default-uri}
+  parameters:
+    disk-quota: 256M
+    keep-existing-routes: true
+    memory: 256M
+- name: training-registration-app-deployer
+  type: com.sap.application.content
+  path: gen
+  requires:
+  - name: training-registration-auth
+  - name: srv-api
+  - name: training-registration-html5-repo-host
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+      content-target: true
+  build-parameters:
+    build-result: app/
+    requires:
+    - artifacts:
+      - admin-authors.zip
+      name: trainingregistrationadminauthors
+      target-path: app/
+    - artifacts:
+      - admin-books.zip
+      name: trainingregistrationadminbooks
+      target-path: app/
+    - artifacts:
+      - browse.zip
+      name: trainingregistrationbrowse
+      target-path: app/
+    - artifacts:
+      - genres.zip
+      name: trainingregistrationgenres
+      target-path: app/
+    - artifacts:
+      - trainingtraining.zip
+      name: trainingtraining
+      target-path: app/
+    - artifacts:
+      - trainingenrolments.zip
+      name: trainingenrolments
+      target-path: app/
+- name: trainingregistrationadminauthors
+  type: html5
+  path: app/admin-authors
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm ci
+    - npm run build
+    supported-platforms: []
+- name: trainingregistrationadminbooks
+  type: html5
+  path: app/admin-books
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm ci
+    - npm run build
+    supported-platforms: []
+- name: trainingregistrationbrowse
+  type: html5
+  path: app/browse
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm ci
+    - npm run build
+    supported-platforms: []
+- name: trainingregistrationgenres
+  type: html5
+  path: app/genres
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm ci
+    - npm run build
+    supported-platforms: []
+- name: trainingtraining
+  type: html5
+  path: app/training
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: trainingenrolments
+  type: html5
+  path: app/enrolments
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: training-registration-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      oauth2-configuration:
+        credential-types:
+        - binding-secret
+        - x509
+        redirect-uris:
+        - https://*~{app-api/app-uri}/**
+      role-collections:
+      - description: generated
+        name: admin (training-registration ${org}-${space})
+        role-template-references:
+        - $XSAPPNAME.admin
+      tenant-mode: dedicated
+      xsappname: training-registration-${org}-${space}
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+  requires:
+  - name: app-api
+- name: training-registration-html5-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
+- name: training-registration-html5-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: training-registration-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: training-registration-destination-service
+    service-plan: lite
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production

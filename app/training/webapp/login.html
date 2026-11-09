@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Training Registration - Login</title>
+
+    <script
+        id="sap-ui-bootstrap"
+        src="https://sapui5.hana.ondemand.com/1.154.0/resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_horizon"
+        data-sap-ui-libs="sap.m"
+        data-sap-ui-async="true">
+    </script>
+
+    <script>
+        sap.ui.getCore().attachInit(function () {
+            sap.ui.require(["sap/m/App", "sap/m/Page", "sap/m/VBox",
+                "sap/m/Title", "sap/m/Input", "sap/m/Button",
+                "sap/m/MessageStrip", "sap/m/FlexBox"
+            ], function (App, Page, VBox, Title, Input, Button,
+                         MessageStrip, FlexBox) {
+
+                const username = new Input({
+                    placeholder: "Username",
+                    width: "100%"
+                });
+
+                const password = new Input({
+                    placeholder: "Password",
+                    type: "Password",
+                    width: "100%"
+                });
+
+                const message = new MessageStrip({
+                    visible: false,
+                    type: "Error",
+                    showCloseButton: false
+                });
+
+                const loginButton = new Button({
+                    text: "Log In",
+                    type: "Emphasized",
+                    width: "100%",
+                    press: async function () {
+                        message.setVisible(false);
+
+                        try {
+                            const response = await fetch("/demo-login", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                credentials: "same-origin",
+                                body: JSON.stringify({
+                                    username: username.getValue().trim(),
+                                    password: password.getValue()
+                                })
+                            });
+
+                            if (!response.ok) {
+                                message.setText("Invalid username or password.");
+                                message.setVisible(true);
+                                return;
+                            }
+
+                        window.location.href = "./index.html#/Sessions";
+                        } catch (error) {
+                            message.setText("Unable to connect to the server.");
+                            message.setVisible(true);
+                        }
+                    }
+                });
+
+                const form = new VBox({
+                    width: "360px",
+                    items: [
+                        new Title({
+                           text: "Training Registration Login",
+                            level: "H2"
+                        }),
+                        username,
+                        password,
+                        message,
+                        loginButton
+                    ]
+                }).addStyleClass("sapUiResponsiveContentPadding");
+
+                const page = new Page({
+                    title: "Training Registration",
+                    content: [
+                        new FlexBox({
+                            height: "100%",
+                            justifyContent: "Center",
+                            alignItems: "Center",
+                            items: [form]
+                        })
+                    ]
+                });
+
+                new App({
+                    pages: [page]
+                }).placeAt("content");
+            });
+        });
+    </script>
+</head>
+
+<body class="sapUiBody sapUiSizeCompact">
+    <div id="content"></div>
+</body>
+</html>
