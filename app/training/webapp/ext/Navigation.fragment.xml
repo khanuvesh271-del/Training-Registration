@@ -1,0 +1,9 @@
+
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <Button
+        text="Enrolment Details"
+        type="Emphasized"
+        press=".onOpenEnrolments" />
+</core:FragmentDefinition>

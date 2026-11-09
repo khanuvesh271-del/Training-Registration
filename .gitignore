@@ -1,42 +1,39 @@
+
+# Dependencies
 node_modules/
+
+# Build and generated output
 target/
 _out/
 gen/
-
-.cdsrc-private.json
-default-*.json
-*.sqlite
-
-# MTA
+.deploy/
+.gen/
+**/dist/
 mta_archives/
 *_mta_build_tmp
 *.mtar
 
-# Other
-.DS_Store
-
-# @cap-js/cds-typer
-@cds-models
- .cdsrc-private.json
-db/*.sqlite
-db.sqlite
-node_modules/
-.env
-
-# Private credentials and session data
+# Private configuration and credentials
 .cdsrc-private.json
-cookies.txt
+default-*.json
 .env
+.env.*
 
-# Local databases
-db/
-db.sqlite
+# Local databases (keep database models and CSV seed data)
+*.sqlite
+*.db
 
-# Dependencies
-node_modules/
-# Generated files
-.deploy/
-.gen/
+# Generated CDS typer output
+@cds-models/
 
-# Build output
-**/dist/
+# Local IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local session data
+cookies.txt
+*.sqlite-shm
+*.sqlite-wal
+
