@@ -1,0 +1,91 @@
+
+<mvc:View
+    controllerName="training.adminDashboard.controller.App"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+
+    <App id="adminApp">
+      <Page
+    title="Training Registration Admin Dashboard"
+    showHeader="true">
+
+    <headerContent>
+        <Button
+            text="Refresh"
+            icon="sap-icon://refresh"
+            press=".onRefresh"/>
+    </headerContent>
+
+            <content>
+                <VBox
+                    class="sapUiMediumMargin"
+                    busy="{dashboard>/loading}">
+
+                    <Title
+                        text="Welcome to Admin Dashboard"
+                        level="H1"/>
+
+                    <Text
+                        text="Monitor your training registration system."
+                        class="sapUiSmallMarginBottom"/>
+
+                    <FlexBox
+                        wrap="Wrap"
+                        alignItems="Stretch"
+                        class="sapUiSmallMarginTop">
+
+                        <Panel
+                            headerText="Total Training Sessions"
+                            width="260px"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                            <content>
+                                <ObjectNumber
+                                    number="{dashboard>/totalSessions}"
+                                    emphasized="true"
+                                    state="Information"/>
+                            </content>
+                        </Panel>
+
+                        <Panel
+                            headerText="Active Enrolments"
+                            width="260px"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                            <content>
+                                <ObjectNumber
+                                    number="{dashboard>/activeEnrolments}"
+                                    emphasized="true"
+                                    state="Success"/>
+                            </content>
+                        </Panel>
+
+                        <Panel
+                            headerText="Total Employees"
+                            width="260px"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                            <content>
+                                <ObjectNumber
+                                    number="{dashboard>/totalEmployees}"
+                                    emphasized="true"
+                                    state="Information"/>
+                            </content>
+                        </Panel>
+
+                        <Panel
+                            headerText="Available Seats"
+                            width="260px"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                            <content>
+                                <ObjectNumber
+                                    number="{dashboard>/availableSeats}"
+                                    emphasized="true"
+                                    state="Success"/>
+                            </content>
+                        </Panel>
+
+                    </FlexBox>
+
+                </VBox>
+            </content>
+        </Page>
+    </App>
+</mvc:View>

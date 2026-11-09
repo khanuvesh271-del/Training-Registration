@@ -1,0 +1,44 @@
+
+<mvc:View
+    controllerName="training.training.controller.Login"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+
+    <Page title="Training Registration" class="sapUiResponsiveContentPadding">
+        <content>
+            <VBox
+                width="100%"
+                alignItems="Center"
+                justifyContent="Center"
+                class="sapUiMediumMarginTop">
+
+                <Title text="Employee Login" level="H2" class="sapUiMediumMarginBottom"/>
+
+                <Input
+                    id="username"
+                    placeholder="Username"
+                    width="300px"/>
+
+                <Input
+                    id="password"
+                    placeholder="Password"
+                    type="Password"
+                    width="300px"
+                    class="sapUiSmallMarginTop"/>
+
+                <Button
+                    text="Log In"
+                    type="Emphasized"
+                    width="300px"
+                    press=".onLogin"
+                    class="sapUiMediumMarginTop"/>
+
+                <Text
+                    id="errorMessage"
+                    text=""
+                    visible="false"
+                    class="sapUiSmallMarginTop"/>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

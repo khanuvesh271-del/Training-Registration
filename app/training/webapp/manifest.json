@@ -1,0 +1,143 @@
+
+{
+  "_version": "1.90.0",
+  "sap.app": {
+    "id": "training.training",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "dataSources": {
+      "mainService": {
+        "uri": "/training/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.154.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "training.training.i18n.i18n"
+        }
+      },
+      "": {
+  "dataSource": "mainService",
+  "preload": false,
+  "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": "",
+          "name": "Login",
+          "target": "Login"
+        },
+        {"pattern": "Sessions:?query:",
+          "name": "SessionsList",
+          "target": "SessionsList"
+        },
+        {
+          "pattern": "Sessions({key}):?query:",
+          "name": "SessionsObjectPage",
+          "target": "SessionsObjectPage"
+        }
+      ],
+      "targets": {
+        "Login": {
+          "type": "View",
+          "id": "Login",
+          "name": "training.training.login.Login",
+          "viewType": "XML"
+        },
+        "SessionsList": {
+          "type": "Component",
+          "id": "SessionsList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/Sessions",
+              "variantManagement": "Page",
+              "navigation": {
+                "Sessions": {
+                  "detail": {
+                    "route": "SessionsObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "SessionsObjectPage": {
+          "type": "Component",
+          "id": "SessionsObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Sessions"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}
