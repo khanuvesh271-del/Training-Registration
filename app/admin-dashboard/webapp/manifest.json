@@ -1,6 +1,6 @@
 
 {
-  "_version": "1.65.0",
+  "_version": "1.61.0",
   "sap.app": {
     "id": "training.adminDashboard",
     "type": "application",
@@ -19,18 +19,22 @@
     }
   },
   "sap.ui5": {
-    "dependencies": {
-      "minUI5Version": "1.120.0",
-      "libs": {
-        "sap.m": {},
-        "sap.ui.core": {}
-      }
-    },
-    "rootView": {
-      "viewName": "training.adminDashboard.view.App",
-      "type": "XML",
-      "id": "App",
-      "async": true
+  "dependencies": {
+    "minUI5Version": "1.120.0",
+    "libs": {
+      "sap.m": {},
+      "sap.ui.core": {}
     }
+  },
+  "contentDensities": {
+    "compact": true,
+    "cozy": true
+  },
+  "rootView": {
+    "viewName": "training.adminDashboard.view.App",
+    "type": "XML",
+    "id": "App",
+    "async": true
   }
+}
 }

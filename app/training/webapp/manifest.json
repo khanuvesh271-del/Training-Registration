@@ -39,6 +39,15 @@
         "sap.fe.templates": {}
       }
     },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController": {
+            "controllerName": "training.training.ext.controller.Navigation"
+          }
+        }
+      }
+    },
     "contentDensities": {
       "compact": true,
       "cozy": true
@@ -51,9 +60,9 @@
         }
       },
       "": {
-  "dataSource": "mainService",
-  "preload": false,
-  "settings": {
+        "dataSource": "mainService",
+        "preload": false,
+        "settings": {
           "operationMode": "Server",
           "autoExpandSelect": true,
           "earlyRequests": true
@@ -75,7 +84,8 @@
           "name": "Login",
           "target": "Login"
         },
-        {"pattern": "Sessions:?query:",
+        {
+          "pattern": "Sessions:?query:",
           "name": "SessionsList",
           "target": "SessionsList"
         },
@@ -83,6 +93,11 @@
           "pattern": "Sessions({key}):?query:",
           "name": "SessionsObjectPage",
           "target": "SessionsObjectPage"
+        },
+        {
+          "pattern": "Enrolments:?query:",
+          "name": "EnrolmentsList",
+          "target": "EnrolmentsList"
         }
       ],
       "targets": {
@@ -111,6 +126,19 @@
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
                     "type": "ResponsiveTable"
+                  },
+                  "actions": {
+                    "EnrolmentDetails": {
+                      "text": "Enrolment Details",
+                      "press": ".extension.training.training.ext.controller.Navigation.onOpenEnrolments",
+                      "requiresSelection": false
+                    },
+                   "AdminDashboard": {
+    "text": "Admin Dashboard",
+    "press": ".extension.training.training.ext.controller.Navigation.onOpenAdminDashboard",
+    "requiresSelection": false,
+    "visible": "{= ${auth>/isAdmin} }"
+}
                   }
                 }
               }
@@ -125,6 +153,17 @@
             "settings": {
               "editableHeaderContent": false,
               "contextPath": "/Sessions"
+            }
+          }
+        },
+        "EnrolmentsList": {
+          "type": "Component",
+          "id": "EnrolmentsList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/Enrolments",
+              "variantManagement": "Page"
             }
           }
         }
