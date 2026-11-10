@@ -12,7 +12,7 @@
     "@sap/cds-dk": "^10",
     "@sap/ux-ui5-tooling": "^1.34.0",
     "cds-plugin-ui5": "^0.17.0",
-    "mbt": "^1.2.49",
+    "mbt": "^1.2.51",
     "rimraf": "^5.0.5"
   },
   "scripts": {
@@ -24,20 +24,21 @@
     "watch-enrolments": "cds watch --open training.enrolments/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "private": true,
-  "cds": {
-    "requires": {
-      "db": {
-        "kind": "sqlite",
-        "credentials": {
-          "url": "db/training.sqlite"
-        }
-      },
-      "[production]": {
-        "auth": "xsuaa"
-      },
-      "html5-repo": true
-    }
-  },
+ 
+"cds": {
+  "requires": {
+    "db": {
+      "kind": "sqlite",
+      "credentials": {
+        "url": "db/training.sqlite"
+      }
+    },
+    "[production]": {
+      "auth": "xsuaa"
+    },
+    "html5-repo": true
+  }
+},
   "workspaces": [
     "app/*"
   ],
@@ -45,5 +46,8 @@
     "app/training",
     "app/enrolments",
     "app/admin-dashboard"
-  ]
+  ],
+  "allowScripts": {
+    "mbt@1.2.51": true
+  }
 }

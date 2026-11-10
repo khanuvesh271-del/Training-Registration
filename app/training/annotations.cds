@@ -138,11 +138,12 @@ annotate service.Sessions with @(
         },
     ],
 UI.Identification : [
-    {
-        $Type : 'UI.DataFieldForAction',
-        Action : 'TrainingService.registerForTraining',
-        Label : 'Register for Training',
-    },
+   {
+    $Type : 'UI.DataFieldForAction',
+    Action : 'TrainingService.registerForTraining',
+    Label : 'Register for Training',
+    ![@UI.Hidden] : isAdmin,
+},
     {
         $Type : 'UI.DataFieldForAction',
         Action : 'TrainingService.closeSession',
