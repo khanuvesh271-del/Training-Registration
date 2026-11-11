@@ -11,6 +11,7 @@ service TrainingService {
     }
 
     function getDashboardStats() returns DashboardStats;
+function isAdmin() returns Boolean;
 entity Trainers as projection on db.Trainers;
 
 entity Courses as projection on db.Courses;

@@ -3,13 +3,14 @@ import cds from '@sap/cds';
 
 export default class TrainingService extends cds.ApplicationService {
     async init() {
-        const { Enrolments, Sessions } = this.entities;
+       const { Enrolments, Sessions, Trainers, Courses } = this.entities;
         const { Employees } = cds.entities('training.registration');
         
 
 // Resolve the logged-in CAP user to an employee record
 const getCurrentEmployee = async (req) => {
     const username = req.user.id;
+    console.log("CAP USER:", req.user.id, "ROLES:", req.user.roles);
 
     if (!username || username === 'anonymous') {
         return req.reject(401, 'Authentication required.');
@@ -32,7 +33,7 @@ const getCurrentEmployee = async (req) => {
 const requireAdmin = async (req) => {
     const employee = await getCurrentEmployee(req);
 
-    if (employee.role !== 'ADMIN') {
+    if (!req.user.is('admin') || employee.role !== 'ADMIN') {
         return req.reject(
             403,
             'Administrator access required.'
@@ -41,6 +42,12 @@ const requireAdmin = async (req) => {
 
     return employee;
 };
+// Restrict master-data changes to administrators
+for (const entity of [Trainers, Courses, Sessions]) {
+    this.before(['CREATE', 'UPDATE', 'DELETE'], entity, async (req) => {
+        await requireAdmin(req);
+    });
+}
 // Add employee display names to enrolment records
 // Add employee and audit display names to enrolment records
 this.after('READ', 'Enrolments', async (enrolments) => {
@@ -81,7 +88,8 @@ this.after('READ', 'Enrolments', async (enrolments) => {
                 ? sessions
                 : [sessions];
                 const employee = await getCurrentEmployee(req);
-const isAdmin = employee.role === 'ADMIN';
+const isAdmin =
+    req.user.is('admin') && employee.role === 'ADMIN';
 
 for (const session of sessionList) {
     session.isAdmin = isAdmin;
@@ -136,7 +144,8 @@ this.before('READ', 'Enrolments', async (req) => {
     const employee = await getCurrentEmployee(req);
 
     // Administrators can view all enrolments
-    if (employee.role === 'ADMIN') return;
+    // Only users with both admin permissions can view all enrolments
+if (req.user.is('admin') && employee.role === 'ADMIN') return;
 
     // Employees can view only their own ACTIVE enrolments
     req.query.where({
@@ -244,6 +253,21 @@ this.before('UPDATE', 'Enrolments', (req) => {
     return req.reject(
         403,
         'Direct enrolment updates are not allowed. Use the available actions.'
+    );
+});
+// Prevent direct enrolment creation
+this.before('CREATE', 'Enrolments', (req) => {
+    return req.reject(
+        403,
+        'Direct enrolment creation is not allowed. Use registerForTraining.'
+    );
+});
+
+// Prevent direct enrolment deletion
+this.before('DELETE', 'Enrolments', (req) => {
+    return req.reject(
+        403,
+        'Direct enrolment deletion is not allowed. Use the cancel action.'
     );
 });
         // Register for training
@@ -364,8 +388,11 @@ this.on('cancel', 'Enrolments', async (req) => {
 
     // Employees can cancel only their own enrolments.
     // Administrators can cancel any enrolment.
+     const isAdmin =
+        req.user.is('admin') && employee.role === 'ADMIN';
+
     if (
-        employee.role !== 'ADMIN' &&
+        !isAdmin &&
         enrolment.employeeID !== employee.employeeID
     ) {
         return req.reject(
@@ -390,6 +417,10 @@ this.on('cancel', 'Enrolments', async (req) => {
     return await SELECT.one
         .from(Enrolments)
         .where({ ID });
+});
+this.on('isAdmin', async (req) => {
+    await requireAdmin(req);
+    return true;
 });
     // Admin dashboard statistics
 this.on('getDashboardStats', async (req) => {

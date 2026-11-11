@@ -21,9 +21,7 @@ module.exports = function (options) {
       });
     }
 
-    req.user = user;
-    cds.context.user = user;
-
+    cds.context.user = req.user = user;
     return next();
   };
 };
